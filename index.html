@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#102b24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trenér U8">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Trenér U8 – deník a plánovač</title>
+<style>
+:root{--bg:#f3f6f3;--card:#fff;--ink:#172820;--muted:#6d7b72;--green:#18794e;--green2:#dff4e7;--line:#e1e9e2;--dark:#102b24;--orange:#ef9c36;--red:#b83b3b;--shadow:0 5px 20px #173c2810}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+header{background:var(--dark);color:white;padding:calc(18px + env(safe-area-inset-top)) 18px 22px;border-radius:0 0 24px 24px}
+.topline{display:flex;justify-content:space-between;align-items:center}.brand{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#a9cbb7;font-weight:800}.pill{background:#24483b;color:#d9f7e4;padding:7px 10px;border-radius:999px;font-size:12px}
+h1{font-size:27px;line-height:1.1;margin:18px 0 7px;letter-spacing:-.7px}header p{margin:0;color:#c3d5cb;font-size:14px}
+main{max-width:760px;margin:0 auto;padding:17px 14px}.tab{display:none}.tab.active{display:block}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 2px 12px}.sectionhead h2{font-size:19px;margin:0;letter-spacing:-.3px}.muted{color:var(--muted)}.small{font-size:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px;box-shadow:var(--shadow)}.hero-card{background:linear-gradient(135deg,#e2f5e9,#f8fcf9);border-color:#cce9d6}.hero-card h3{font-size:17px;margin:5px 0}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}.kpi{background:white;border:1px solid var(--line);border-radius:15px;padding:13px 10px}.kpi strong{display:block;font-size:22px;letter-spacing:-.6px}.kpi span{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+button,.btn{border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;background:var(--green);color:white;cursor:pointer;text-align:center;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}.btn.secondary,button.secondary{background:#edf3ef;color:#284437}.btn.outline,button.outline{background:white;border:1px solid var(--line);color:var(--ink)}button.danger{background:#fff0f0;color:var(--red)}button.smallbtn{padding:8px 10px;font-size:12px;border-radius:10px}.full{width:100%}
+input,select,textarea{width:100%;border:1px solid #d5e0d7;background:#fff;border-radius:12px;padding:12px;color:var(--ink);font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #18794e17}textarea{resize:vertical;min-height:76px}label{font-size:12px;color:var(--muted);font-weight:700;display:block;margin:0 0 6px}.field{margin-bottom:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.nav{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:5}.nav button{display:flex;flex-direction:column;background:transparent;color:#748078;gap:3px;font-size:9px;padding:7px 1px;border-radius:12px}.nav button b{font-size:20px;font-weight:500}.nav button.active{background:var(--green2);color:var(--green)}
+.tag{display:inline-flex;background:#edf5ef;color:#246343;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:700}.timeline{position:relative;padding-left:19px}.timeline:before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:#dce9df}.block{position:relative;border:1px solid var(--line);border-radius:15px;padding:12px;margin-bottom:10px;background:#fff}.block:before{content:"";position:absolute;left:-18px;top:17px;width:10px;height:10px;background:var(--green);border:3px solid var(--bg);border-radius:50%}.time{font-size:12px;color:var(--green);font-weight:800}.block h4{margin:4px 0;font-size:15px}.block p{margin:5px 0 0;font-size:13px;color:var(--muted)}.progress{height:7px;background:#e9f0ea;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:var(--green);border-radius:99px}.listitem{padding:12px 0;border-bottom:1px solid var(--line)}.listitem:last-child{border-bottom:0}.empty{text-align:center;padding:28px 15px;color:var(--muted)}.empty b{display:block;color:var(--ink);margin-bottom:5px}.check{width:20px;height:20px;accent-color:var(--green)}.metric{font-size:13px;color:var(--muted)}.metric strong{font-size:14px;color:var(--ink)}.category-row{margin:13px 0}.category-row .row{margin-bottom:6px}.filterbar{display:flex;gap:7px;overflow:auto;padding:2px 0 12px}.filterbar button{white-space:nowrap;flex-shrink:0}.toast{position:fixed;left:16px;right:16px;bottom:95px;background:#18382b;color:white;padding:13px 15px;border-radius:13px;box-shadow:var(--shadow);z-index:10;display:none}.footnote{font-size:11px;color:var(--muted);line-height:1.5;margin:15px 3px}
+@media(min-width:600px){main{padding:22px}.kpi{padding:17px}.nav{left:calc(50% - 360px);right:calc(50% - 360px);border-radius:18px 18px 0 0}.card{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="topline"><div class="brand">⚽ Trenérský deník</div><div class="pill">Kategorie U8</div></div>
+ <h1>Trénuj chytře.<br>Rozvíjej každého hráče.</h1>
+ <p>Plánování, evidence a přehled tréninků na jednom místě.</p>
+</header>
+<main>
+<section id="home" class="tab active">
+ <div class="sectionhead"><h2>Přehled</h2><span class="muted small" id="todayLabel"></span></div>
+ <div class="card hero-card">
+  <div class="row between"><span class="tag">DALŠÍ KROK</span><span>🗓️</span></div>
+  <h3 id="nextTitle">Naplánuj svůj první trénink</h3><p class="muted small" id="nextSub">Sestav si trénink z jednotlivých bloků a ulož ho do kalendáře.</p>
+  <button class="full" style="margin-top:12px" onclick="newSession()">＋ Naplánovat trénink</button>
+ </div>
+ <div class="kpis">
+  <div class="kpi"><strong id="statSessions">0</strong><span>Tréninků</span></div>
+  <div class="kpi"><strong id="statMinutes">0</strong><span>Odtrénovaných min</span></div>
+  <div class="kpi"><strong id="statDrills">0</strong><span>Cvičení v knihovně</span></div>
+ </div>
+ <div class="sectionhead"><h2>Nedávné tréninky</h2><button class="secondary smallbtn" onclick="showTab('history')">Všechny →</button></div>
+ <div id="recentList" class="card"></div>
+ <div class="sectionhead"><h2>Rychlý start</h2></div>
+ <div class="card">
+  <div class="row"><div style="font-size:27px">🧩</div><div class="grow"><b>Vytvoř vlastní trénink</b><div class="muted small">Vyber bloky, nastav délku a přidej trenérské poznámky.</div></div></div>
+  <button class="secondary full" style="margin-top:13px" onclick="newSession()">Otevřít plánovač</button>
+ </div>
+</section>
+
+
+<section id="calendar" class="tab">
+ <div class="sectionhead"><h2>Kalendář</h2><button class="smallbtn" onclick="newSession()">＋ Trénink</button></div>
+ <div class="card">
+  <div class="row between">
+   <button class="secondary smallbtn" onclick="changeMonth(-1)">‹ Předchozí</button>
+   <h3 id="calendarMonth" style="margin:0;text-transform:capitalize"></h3>
+   <button class="secondary smallbtn" onclick="changeMonth(1)">Další ›</button>
+  </div>
+  <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:16px"></div>
+  <div class="row" style="gap:12px;margin-top:13px;flex-wrap:wrap"><span class="small muted">● Naplánováno</span><span class="small" style="color:#18794e">● Dokončeno</span><span class="small muted">● Vybraný den</span></div>
+ </div>
+ <div class="sectionhead"><h2 id="selectedDayTitle">Tréninky dne</h2><span id="selectedDayCount" class="tag">0</span></div>
+ <div id="calendarDayList"></div>
+</section>
+
+<section id="planner" class="tab">
+ <div class="sectionhead"><h2 id="plannerHeading">Nový trénink</h2><span class="tag">PLÁNOVAČ</span></div>
+ <form id="sessionForm" class="card">
+  <div class="field"><label for="sessionTitle">Název / téma tréninku</label><input id="sessionTitle" required placeholder="Např. Vedení míče a kličky"></div>
+  <div class="two">
+   <div class="field"><label for="sessionDate">Datum</label><input id="sessionDate" type="date" required></div>
+   <div class="field"><label for="sessionDuration">Délka (min)</label><select id="sessionDuration"><option>45</option><option>60</option><option selected>75</option><option>90</option></select></div>
+  </div>
+  <div class="field"><label for="sessionGoal">Hlavní cíl</label><input id="sessionGoal" placeholder="Např. zvedat hlavu při vedení míče"></div>
+  <div class="field"><label for="sessionNotes">Poznámka k tréninku</label><textarea id="sessionNotes" placeholder="Co chceš dnes rozvíjet?"></textarea></div>
+  <div class="sectionhead"><h2>Časový harmonogram</h2><span id="totalTime" class="tag">0 / 75 min</span></div>
+  <div id="plannedBlocks" class="timeline"></div>
+  <div class="field"><label for="drillPicker">Přidat cvičení z knihovny</label><select id="drillPicker"></select></div>
+  <button type="button" class="secondary full" onclick="addSelectedDrill()">＋ Přidat vybrané cvičení</button>
+  <div style="height:10px"></div>
+  <button type="button" class="outline full" onclick="addCustomBlock()">＋ Přidat vlastní blok</button>
+  <div style="height:15px"></div>
+  <button class="full" type="submit">Uložit trénink</button>
+  <button type="button" id="cancelEdit" class="secondary full" style="display:none;margin-top:8px" onclick="resetPlanner()">Zrušit úpravy</button>
+ </form>
+ <div class="card">
+  <b>💡 Tip pro U8</b><p class="muted small">Střídej krátké technické bloky s herními situacemi. Nech dětem dostatek kontaktů s míčem a prostor pro vlastní rozhodování.</p>
+ </div>
+</section>
+
+<section id="history" class="tab">
+ <div class="sectionhead"><h2>Deník tréninků</h2><button class="smallbtn" onclick="newSession()">＋ Přidat</button></div>
+ <div class="filterbar"><button class="secondary smallbtn" id="filterAll" onclick="setHistoryFilter('all')">Vše</button><button class="secondary smallbtn" id="filterPlanned" onclick="setHistoryFilter('planned')">Naplánované</button><button class="secondary smallbtn" id="filterDone" onclick="setHistoryFilter('done')">Dokončené</button></div>
+ <div id="historyList"></div>
+</section>
+
+<section id="library" class="tab">
+ <div class="sectionhead"><h2>Knihovna cvičení</h2><button class="smallbtn" onclick="openDrillForm()">＋ Vlastní</button></div>
+ <div class="field"><input id="drillSearch" placeholder="Hledat cvičení nebo kategorii…" oninput="renderLibrary()"></div>
+ <div class="filterbar" id="categoryFilters"></div>
+ <div id="drillFormCard" class="card" style="display:none">
+  <div class="sectionhead"><h2>Nové cvičení</h2><button class="secondary smallbtn" onclick="closeDrillForm()">Zavřít</button></div>
+  <div class="field"><label>Název</label><input id="customDrillTitle" placeholder="Název cvičení"></div>
+  <div class="field"><label>Kategorie</label><select id="customDrillCategory"></select></div>
+  <div class="two"><div class="field"><label>Délka (min)</label><input id="customDrillDuration" type="number" min="1" max="60" value="10"></div><div class="field"><label>Počet hráčů</label><input id="customDrillPlayers" placeholder="Např. 6–12"></div></div>
+  <div class="field"><label>Pomůcky</label><input id="customDrillEquipment" placeholder="Míče, kužely, mini branky"></div>
+  <div class="field"><label>Popis a trenérské body</label><textarea id="customDrillDescription" placeholder="Jak cvičení probíhá? Na co se zaměřit?"></textarea></div>
+  <button class="full" onclick="saveCustomDrill()">Uložit do knihovny</button>
+ </div>
+ <div id="libraryList"></div>
+ <div class="footnote">Ukázková cvičení jsou pracovní inspirace. Uprav si je podle počtu hráčů, prostoru a úrovně týmu.</div>
+</section>
+
+<section id="stats" class="tab">
+ <div class="sectionhead"><h2>Statistiky</h2><span class="tag">PŘEHLED</span></div>
+ <div class="kpis">
+  <div class="kpi"><strong id="doneCount">0</strong><span>Dokončeno</span></div>
+  <div class="kpi"><strong id="doneHours">0 h</strong><span>Čas na hřišti</span></div>
+  <div class="kpi"><strong id="blockCount">0</strong><span>Bloků</span></div>
+ </div>
+ <div class="card"><h3 style="margin-top:0">Minuty podle kategorií</h3><p class="muted small">Počítají se dokončené tréninky a jejich bloky.</p><div id="categoryStats"></div></div>
+ <div class="card"><h3 style="margin-top:0">Nejčastější cvičení</h3><div id="popularDrills"></div></div>
+ <div class="card">
+  <h3 style="margin-top:0">Záloha a přenos dat</h3><p class="muted small">Data jsou zatím uložená jen v tomto prohlížeči. Pravidelně si stáhni zálohu, pokud nechceš o historii přijít.</p>
+  <div class="two"><button onclick="exportData()">Exportovat JSON</button><button class="secondary" onclick="document.getElementById('importFile').click()">Importovat JSON</button></div>
+  <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importData(event)">
+ </div>
+ <div class="card">
+  <div class="row between"><h3 style="margin:0">🐙 Záloha na GitHub</h3><span id="githubBackupStatus" class="tag">Nenastaveno</span></div>
+  <p class="muted small">Uloží kopii tréninků a cvičení jako JSON do soukromého GitHub repozitáře. Záloha se spouští ručně tlačítkem; při každém přepsání zůstává starší verze v historii commitů.</p>
+  <div class="field"><label for="ghOwner">Vlastník repozitáře (GitHub uživatel)</label><input id="ghOwner" placeholder="např. SlavaH16" autocomplete="off"></div>
+  <div class="field"><label for="ghRepo">Název soukromého repozitáře</label><input id="ghRepo" placeholder="např. trenersky-denik-zalohy" autocomplete="off"></div>
+  <div class="field"><label for="ghBranch">Větev</label><input id="ghBranch" value="main" autocomplete="off"></div>
+  <div class="field"><label for="ghPath">Cesta k souboru zálohy</label><input id="ghPath" value="zaloha/trenersky-denik-u8.json" autocomplete="off"></div>
+  <div class="field"><label for="ghToken">GitHub fine-grained token (jen pro tuto akci)</label><input id="ghToken" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+  <p class="footnote">Token se do aplikace ani localStorage neukládá. Vytvoř token jen pro vybraný soukromý repozitář s oprávněním Contents: Read and write. Nikdy ho nevkládej do kódu ani veřejného repozitáře. Použij samostatný soukromý repozitář pro zálohy.</p>
+  <button class="full" onclick="githubBackupNow()">Zálohovat data na GitHub</button>
+  <button class="secondary full" style="margin-top:8px" onclick="githubRestoreNow()">Obnovit data z GitHubu</button>
+ </div>
+ <div class="card">
+  <div class="row between"><h3 style="margin:0">☁️ Cloudová synchronizace</h3><span id="cloudStatus" class="tag">Nenastaveno</span></div>
+  <p class="muted small">Pro synchronizaci mezi telefony je potřeba vlastní bezplatný projekt Supabase. Konfigurace se uloží jen v tomto prohlížeči; synchronizace funguje po přihlášení stejným e-mailem.</p>
+  <div class="field"><label for="supabaseUrl">Supabase Project URL</label><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co" autocomplete="url"></div>
+  <div class="field"><label for="supabaseKey">Supabase publishable / anon key</label><input id="supabaseKey" placeholder="sb_publishable_… nebo veřejný anon klíč" autocomplete="off"></div>
+  <button class="secondary full" onclick="saveCloudConfig()">Uložit nastavení cloudu</button>
+  <div style="height:10px"></div>
+  <div class="field"><label for="cloudEmail">E-mail pro přihlášení</label><input id="cloudEmail" type="email" placeholder="trenér@example.cz" autocomplete="email"></div>
+  <button class="full" onclick="cloudSignIn()">Poslat přihlašovací odkaz</button>
+  <div id="cloudLoggedIn" class="muted small" style="margin-top:10px">Nejsi přihlášen.</div>
+  <div class="two" style="margin-top:10px"><button class="secondary" onclick="cloudSyncNow()">Synchronizovat</button><button class="outline" onclick="cloudSignOut()">Odhlásit</button></div>
+  <p class="footnote">Bez konfigurace Supabase se data ukládají pouze lokálně. Nepoužívej service_role secret key v prohlížeči. Návod v README vysvětluje založení databáze a bezpečnostní pravidla.</p>
+ </div>
+</section>
+</main>
+<nav class="nav">
+ <button class="active" data-tab="home" onclick="showTab('home')"><b>⌂</b>Přehled</button>
+ <button data-tab="calendar" onclick="showTab('calendar')"><b>▦</b>Kalendář</button>
+ <button data-tab="planner" onclick="newSession()"><b>＋</b>Plánovač</button>
+ <button data-tab="history" onclick="showTab('history')"><b>▤</b>Deník</button>
+ <button data-tab="library" onclick="showTab('library')"><b>⚽</b>Cvičení</button>
+ <button data-tab="stats" onclick="showTab('stats')"><b>◔</b>Statistiky</button>
+</nav>
+<div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const CATS=["Práce s míčem","Vedení míče a slalom","Skills a kličky","Situace 1v1","Obrana 1v1","Přihrávky a první dotek","Zakončení","Hry na držení míče","Malé hry","Koordinace a pohyb","Volná hra"];
+const seedDrills=[
+{ id:"d1",title:"Semafor s míčem",category:"Práce s míčem",duration:8,players:"Všichni",equipment:"Míč pro každého, kužely",description:"Děti vedou míč v prostoru. Zelená = rychle, oranžová = malé doteky, červená = zastavit míč podrážkou. Přidávej změny směru a práci oběma nohama."},
+{ id:"d2",title:"Slalomové branky",category:"Vedení míče a slalom",duration:10,players:"Všichni",equipment:"Kužely ve dvojicích, míče",description:"Hráči vedou míč skrz malé branky a hledají volnou cestu. Po průjezdu zvednout hlavu a vybrat další branku. Soutěž na počet průjezdů bez srážky."},
+{ id:"d3",title:"Finta týdne",category:"Skills a kličky",duration:10,players:"Všichni ve dvojicích/řadách",equipment:"Míče, kužely",description:"Ukázat jednu jednoduchou kličku, několikrát ji procvičit bez soupeře a potom ji použít proti pasivnímu obránci. Po fintě zrychlit."},
+{ id:"d4",title:"1v1 do mini branek",category:"Situace 1v1",duration:12,players:"2–8 na hřiště",equipment:"Míče, 2–4 mini branky",description:"Útočník se snaží překonat obránce a skórovat do jedné ze dvou branek. Krátké souboje, rychlá výměna rolí, povzbuzovat odvahu zkusit kličku."},
+{ id:"d5",title:"Zrcadlo ve dvojici",category:"Obrana 1v1",duration:8,players:"Dvojice",equipment:"Kužely, míč volitelně",description:"Jeden hráč se pohybuje do stran a vpřed/vzad, druhý ho zrcadlí. Poté s míčem: obránce drží správnou vzdálenost a reaguje na pohyb útočníka."},
+{ id:"d6",title:"Branky na přihrávku",category:"Přihrávky a první dotek",duration:10,players:"Dvojice nebo trojice",equipment:"Míče, kužely",description:"Dvojice si přihrává skrz malé branky. Po přihrávce se hráč přesune k jiné brance. Střídat pravou a levou nohu, první dotek do prostoru."},
+{ id:"d7",title:"Přihrávka a zakončení",category:"Zakončení",duration:12,players:"4–10",equipment:"Míče, branka/mini branky",description:"Hráč přihraje spoluhráči, naběhne do prostoru a dostane míč zpět ke střele. Důraz na přesnost, první dotek a rychlé rozhodnutí."},
+{ id:"d8",title:"3v1 – udrž míč",category:"Hry na držení míče",duration:8,players:"4–8",equipment:"Kužely, míč",description:"Tři hráči se snaží udržet míč proti jednomu obránci v malém čtverci. Po zisku míče si hráč vymění roli s tím, kdo míč ztratil."},
+{ id:"d9",title:"Zápas 3v3 / 4v4",category:"Malé hry",duration:15,players:"6–12",equipment:"Mini branky, míče, rozlišováky",description:"Malá hra s častým kontaktem s míčem. Občas změň podmínku: gól po kličce, bod navíc za přihrávku do prostoru nebo volná hra bez omezení."},
+{ id:"d10",title:"Barevné reakce",category:"Koordinace a pohyb",duration:7,players:"Všichni",equipment:"Barevné kužely, míče",description:"Hráč vede míč a na signál trenéra mění směr k odpovídající barvě. Zařaď i vizuální signály a jednoduché rozhodování."},
+{ id:"d11",title:"Volná hra",category:"Volná hra",duration:15,players:"Podle počtu",equipment:"Branky, míče, rozlišováky",description:"Nech děti hrát a rozhodovat. Trenér sleduje, zda zkouší dovednosti z tréninku, a dává krátkou pozitivní zpětnou vazbu."}
+];
+const storeKey="trenerU8_v1";
+let data={drills:seedDrills,sessions:[]}, editId=null, draftBlocks=[], histFilter="all", activeCategory="Vše";
+function load(){try{const raw=localStorage.getItem(storeKey);if(raw){const p=JSON.parse(raw);if(Array.isArray(p.drills)&&Array.isArray(p.sessions))data=p;}}catch(e){}}
+function save(){localStorage.setItem(storeKey,JSON.stringify(data));scheduleCloudSave();}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+// Supabase cloud sync. The database table and RLS must be configured as described in README.md.
+let sbClient=null, sbUser=null, cloudSaveTimer=null, cloudApplying=false;
+function getCloudConfig(){try{return JSON.parse(localStorage.getItem("trenerU8_cloud_config")||"{}")}catch(e){return {}}}
+function saveCloudConfig(){
+ const url=document.getElementById("supabaseUrl").value.trim(),key=document.getElementById("supabaseKey").value.trim();
+ if(!url||!key){toast("Doplň URL projektu a veřejný klíč.");return}
+ if(!/^https:\/\/[a-zA-Z0-9.-]+$/.test(url)){toast("Zkontroluj URL projektu Supabase.");return}
+ localStorage.setItem("trenerU8_cloud_config",JSON.stringify({url,key}));
+ initCloud();toast("Nastavení cloudu uloženo v tomto prohlížeči.");
+}
+function initCloud(){
+ const c=getCloudConfig();
+ if(!c.url||!c.key||!window.supabase){setCloudStatus("Nenastaveno","");return}
+ sbClient=window.supabase.createClient(c.url,c.key);
+ sbClient.auth.onAuthStateChange((event,session)=>{sbUser=session?.user||null;updateCloudUi();if(event==="SIGNED_IN")cloudInitialLoad();});
+ sbClient.auth.getSession().then(({data})=>{sbUser=data.session?.user||null;updateCloudUi()}).catch(()=>setCloudStatus("Chyba připojení","danger"));
+ setCloudStatus("Připraveno","");
+}
+function setCloudStatus(label,type){const el=document.getElementById("cloudStatus");if(!el)return;el.textContent=label;el.style.background=type==="danger"?"#fff0f0":type==="ok"?"#dff4e7":"";el.style.color=type==="danger"?"#b83b3b":type==="ok"?"#18794e":""}
+function updateCloudUi(){const el=document.getElementById("cloudLoggedIn");if(el)el.textContent=sbUser?`Přihlášen: ${sbUser.email}`:"Nejsi přihlášen.";if(sbUser)setCloudStatus("Přihlášeno","ok");else if(sbClient)setCloudStatus("Odhlášeno","");}
+async function cloudSignIn(){
+ if(!sbClient){toast("Nejprve ulož nastavení cloudu.");return}
+ const email=document.getElementById("cloudEmail").value.trim();if(!email){toast("Zadej e-mail.");return}
+ const {error}=await sbClient.auth.signInWithOtp({email,options:{emailRedirectTo:location.href.split("#")[0]}});
+ if(error){alert("Přihlášení se nepodařilo: "+error.message);return}
+ toast("Přihlašovací odkaz byl odeslán na e-mail.");
+}
+async function cloudSignOut(){if(!sbClient)return;const {error}=await sbClient.auth.signOut();if(error)alert(error.message);sbUser=null;updateCloudUi();toast("Odhlášeno z cloudu.")}
+async function cloudInitialLoad(){
+ if(!sbClient||!sbUser)return;
+ try{
+  const {data:row,error}=await sbClient.from("coach_u8_data").select("payload,updated_at").eq("user_id",sbUser.id).maybeSingle();
+  if(error)throw error;
+  if(row&&row.payload){
+   const choice=confirm("Našli jsme cloudovou zálohu. OK = načíst cloudová data do tohoto zařízení (nahradí místní data). Zrušit = ponechat místní data a poslat je do cloudu.");
+   if(choice){cloudApplying=true;data=row.payload;saveLocalOnly();cloudApplying=false;renderHome();renderHistory();renderLibrary();renderStats();renderCalendar();fillDrillPicker();toast("Cloudová data načtena.");}
+   else await pushCloudData();
+  }else{
+   if(confirm("V cloudu zatím nejsou data. Nahrát do něj data z tohoto zařízení?"))await pushCloudData();
+  }
+  updateCloudUi();
+ }catch(e){setCloudStatus("Chyba","danger");alert("Cloudové načtení selhalo. Zkontroluj tabulku a RLS nastavení v návodu. Detail: "+e.message)}
+}
+function saveLocalOnly(){localStorage.setItem(storeKey,JSON.stringify(data))}
+function scheduleCloudSave(){if(cloudApplying||!sbClient||!sbUser)return;clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(()=>pushCloudData(),1600)}
+async function pushCloudData(){
+ if(!sbClient||!sbUser){toast("Přihlas se ke cloudu v části Statistiky.");return}
+ try{
+  const payload={drills:data.drills,sessions:data.sessions};
+  const {error}=await sbClient.from("coach_u8_data").upsert({user_id:sbUser.id,payload,updated_at:new Date().toISOString()},{onConflict:"user_id"});
+  if(error)throw error;setCloudStatus("Synchronizováno","ok");toast("Data synchronizována do cloudu.");
+ }catch(e){setCloudStatus("Chyba sync","danger");alert("Synchronizace selhala: "+e.message+"\nZkontroluj prosím nastavení tabulky a RLS podle README.")}
+}
+async function cloudSyncNow(){if(!sbClient){toast("Nejprve nastav Supabase.");return}if(!sbUser){toast("Nejprve se přihlas přes e-mail.");return}await pushCloudData()}
+
+function dateToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function fmtDate(d){if(!d)return "";return new Date(d+"T12:00:00").toLocaleDateString("cs-CZ",{day:"numeric",month:"short",year:"numeric"})}
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.style.display="block";setTimeout(()=>el.style.display="none",2400)}
+function showTab(id){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.id===id));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));if(id==="home")renderHome();if(id==="calendar")renderCalendar();if(id==="history")renderHistory();if(id==="library")renderLibrary();if(id==="stats")renderStats();window.scrollTo({top:0,behavior:"smooth"})}
+function newSession(){resetPlanner();document.getElementById("sessionDate").value=dateToday();showTab("planner")}
+function resetPlanner(){editId=null;draftBlocks=[];document.getElementById("sessionForm").reset();document.getElementById("sessionDate").value=dateToday();document.getElementById("sessionDuration").value="75";document.getElementById("plannerHeading").textContent="Nový trénink";document.getElementById("cancelEdit").style.display="none";renderDraft();fillDrillPicker()}
+function fillDrillPicker(){const el=document.getElementById("drillPicker");el.innerHTML=data.drills.map(d=>`<option value="${esc(d.id)}">${esc(d.title)} · ${esc(d.category)} (${d.duration} min)</option>`).join("")}
+function addSelectedDrill(){const id=document.getElementById("drillPicker").value,d=data.drills.find(x=>x.id===id);if(!d)return;draftBlocks.push({id:"b"+Date.now()+Math.random().toString(16).slice(2,5),drillId:d.id,title:d.title,category:d.category,minutes:Number(d.duration)||10,note:"",done:false});renderDraft()}
+function addCustomBlock(){const title=prompt("Název vlastního bloku:");if(!title||!title.trim())return;const cat=prompt("Kategorie (např. Práce s míčem, Situace 1v1):","Práce s míčem")||"Vlastní";const mins=Math.max(1,Math.min(90,Number(prompt("Délka v minutách:","10"))||10));draftBlocks.push({id:"b"+Date.now(),title:title.trim(),category:cat,minutes:mins,note:"",done:false});renderDraft()}
+function renderDraft(){const el=document.getElementById("plannedBlocks");if(!draftBlocks.length){el.innerHTML='<div class="empty">Zatím tu nejsou žádné bloky.<br><span class="small">Přidej cvičení z knihovny nebo vlastní blok.</span></div>';}else{let cursor=0;el.innerHTML=draftBlocks.map((b,i)=>{const start=cursor;cursor+=Number(b.minutes)||0;return `<div class="block"><div class="row between"><span class="time">${start}–${cursor} min</span><span class="tag">${esc(b.category)}</span></div><h4>${esc(b.title)}</h4><div class="row" style="margin-top:8px"><div class="grow"><label>Délka (min)</label><input type="number" min="1" max="90" value="${Number(b.minutes)}" onchange="changeBlock(${i},'minutes',this.value)"></div><div class="grow"><label>Poznámka trenéra</label><input value="${esc(b.note)}" placeholder="Na co se zaměřit?" onchange="changeBlock(${i},'note',this.value)"></div></div><div class="row" style="margin-top:8px"><button type="button" class="secondary smallbtn" onclick="moveBlock(${i},-1)" ${i===0?"disabled":""}>↑ Nahoru</button><button type="button" class="secondary smallbtn" onclick="moveBlock(${i},1)" ${i===draftBlocks.length-1?"disabled":""}>↓ Dolů</button><button type="button" class="danger smallbtn" onclick="removeBlock(${i})">Odebrat</button></div></div>`}).join("")}
+const total=draftBlocks.reduce((s,b)=>s+(Number(b.minutes)||0),0);document.getElementById("totalTime").textContent=`${total} / ${document.getElementById("sessionDuration").value||75} min`;document.getElementById("totalTime").style.background=total>Number(document.getElementById("sessionDuration").value)?"#fff0e0":"#edf5ef"; }
+function changeBlock(i,k,v){draftBlocks[i][k]=k==="minutes"?Math.max(1,Math.min(90,Number(v)||1)):v;renderDraft()}
+function moveBlock(i,dir){const j=i+dir;if(j<0||j>=draftBlocks.length)return;[draftBlocks[i],draftBlocks[j]]=[draftBlocks[j],draftBlocks[i]];renderDraft()}
+function removeBlock(i){draftBlocks.splice(i,1);renderDraft()}
+document.getElementById("sessionDuration").addEventListener("change",renderDraft);
+document.getElementById("sessionForm").addEventListener("submit",e=>{e.preventDefault();const s={id:editId||"s"+Date.now(),title:document.getElementById("sessionTitle").value.trim(),date:document.getElementById("sessionDate").value,duration:Number(document.getElementById("sessionDuration").value),goal:document.getElementById("sessionGoal").value.trim(),notes:document.getElementById("sessionNotes").value.trim(),blocks:draftBlocks.map(b=>({...b})),status:editId?(data.sessions.find(x=>x.id===editId)?.status||"planned"):"planned",reflection:editId?(data.sessions.find(x=>x.id===editId)?.reflection||""):""};if(!s.title||!s.date){toast("Doplň název a datum tréninku.");return}if(editId)data.sessions=data.sessions.map(x=>x.id===editId?s:x);else data.sessions.push(s);save();resetPlanner();showTab("history");renderCalendar();toast("Trénink uložen.");});
+function editSession(id){const s=data.sessions.find(x=>x.id===id);if(!s)return;editId=id;document.getElementById("sessionTitle").value=s.title;document.getElementById("sessionDate").value=s.date;document.getElementById("sessionDuration").value=s.duration;document.getElementById("sessionGoal").value=s.goal||"";document.getElementById("sessionNotes").value=s.notes||"";draftBlocks=(s.blocks||[]).map(b=>({...b}));document.getElementById("plannerHeading").textContent="Upravit trénink";document.getElementById("cancelEdit").style.display="block";fillDrillPicker();renderDraft();showTab("planner")}
+function finishSession(id){const s=data.sessions.find(x=>x.id===id);if(!s)return;if(s.status==="done"){s.status="planned";s.blocks.forEach(b=>b.done=false)}else{s.status="done";s.blocks.forEach(b=>b.done=true)}save();renderHistory();renderHome();renderCalendar();toast(s.status==="done"?"Trénink označen jako dokončený.":"Trénink vrácen mezi naplánované.");}
+function addReflection(id){const s=data.sessions.find(x=>x.id===id);if(!s)return;const n=prompt("Poznámka po tréninku – co fungovalo a co příště změnit?",s.reflection||"");if(n===null)return;s.reflection=n;save();renderHistory();toast("Zpětná vazba uložena.");}
+function deleteSession(id){if(!confirm("Opravdu smazat tento trénink?"))return;data.sessions=data.sessions.filter(s=>s.id!==id);save();renderHistory();renderHome();renderCalendar();toast("Trénink smazán.");}
+
+let calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), selectedCalendarDate=dateToday();
+function changeMonth(delta){calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+delta,1);renderCalendar()}
+function selectCalendarDate(date){selectedCalendarDate=date;renderCalendar()}
+function renderCalendar(){
+ const monthNames=["leden","únor","březen","duben","květen","červen","červenec","srpen","září","říjen","listopad","prosinec"];
+ document.getElementById("calendarMonth").textContent=monthNames[calendarCursor.getMonth()]+" "+calendarCursor.getFullYear();
+ const first=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth(),1),days=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,0).getDate();
+ const offset=(first.getDay()+6)%7;const weekdays=["Po","Út","St","Čt","Pá","So","Ne"];
+ let out=weekdays.map(w=>`<div style="text-align:center;font-size:11px;color:#6d7b72;font-weight:800;padding:4px 0">${w}</div>`).join("");
+ for(let i=0;i<offset;i++)out+='<div></div>';
+ for(let day=1;day<=days;day++){
+  const date=`${calendarCursor.getFullYear()}-${String(calendarCursor.getMonth()+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+  const items=data.sessions.filter(s=>s.date===date),hasDone=items.some(s=>s.status==="done"),hasPlan=items.some(s=>s.status!=="done"),sel=date===selectedCalendarDate,today=date===dateToday();
+  out+=`<button onclick="selectCalendarDate('${date}')" aria-label="${day}. ${monthNames[calendarCursor.getMonth()]}" style="padding:7px 0 5px;min-height:54px;display:flex;flex-direction:column;gap:4px;justify-content:flex-start;background:${sel?'#18794e':today?'#e2f5e9':'#fff'};color:${sel?'white':'#172820'};border:1px solid ${sel?'#18794e':'#e1e9e2'};border-radius:11px;font-weight:${today||items.length?'800':'500'}"><span>${day}</span><span style="display:flex;gap:3px;min-height:6px">${hasPlan?`<i style="width:6px;height:6px;border-radius:50%;background:${sel?'#f4d18a':'#ef9c36'}"></i>`:""}${hasDone?`<i style="width:6px;height:6px;border-radius:50%;background:${sel?'#fff':'#18794e'}"></i>`:""}</span></button>`;
+ }
+ document.getElementById("calendarGrid").innerHTML=out;
+ document.getElementById("selectedDayTitle").textContent="Tréninky · "+fmtDate(selectedCalendarDate);
+ const list=data.sessions.filter(s=>s.date===selectedCalendarDate).sort((a,b)=>a.title.localeCompare(b.title));
+ document.getElementById("selectedDayCount").textContent=list.length;
+ document.getElementById("calendarDayList").innerHTML=list.length?list.map(sessionCard).join(""):`<div class="card empty"><b>Na tento den zatím nic nemáš</b><button class="secondary" onclick="newSessionForDate('${selectedCalendarDate}')">＋ Naplánovat na tento den</button></div>`;
+}
+function newSessionForDate(date){newSession();document.getElementById("sessionDate").value=date;selectedCalendarDate=date;}
+
+function sessionCard(s){const done=s.status==="done";const mins=(s.blocks||[]).reduce((n,b)=>n+(Number(b.minutes)||0),0);return `<div class="card"><div class="row between"><span class="tag" style="${done?'background:#dff4e7;color:#18794e':'background:#fff2dc;color:#8a5815'}">${done?"DOKONČENO":"NAPLÁNOVÁNO"}</span><span class="muted small">${fmtDate(s.date)}</span></div><h3 style="margin:10px 0 4px">${esc(s.title)}</h3>${s.goal?`<p class="muted small" style="margin:0 0 8px">🎯 ${esc(s.goal)}</p>`:""}<div class="row muted small"><span>▤ ${(s.blocks||[]).length} bloků</span><span>◷ ${mins} min v plánu</span></div>${s.notes?`<p class="small">${esc(s.notes)}</p>`:""}${s.reflection?`<div class="card" style="margin:10px 0 0;background:#f7faf7;box-shadow:none;padding:10px"><b class="small">Poznámka po tréninku</b><p class="small" style="margin:5px 0 0">${esc(s.reflection)}</p></div>`:""}<details style="margin-top:10px"><summary class="small muted">Zobrazit harmonogram (${(s.blocks||[]).length})</summary><div style="margin-top:8px">${(s.blocks||[]).map((b,i)=>`<div class="listitem"><div class="row between"><b>${i+1}. ${esc(b.title)}</b><span class="small muted">${b.minutes} min</span></div><div class="small muted">${esc(b.category)}${b.note?" · "+esc(b.note):""}</div></div>`).join("")}</div></details><div class="row" style="margin-top:13px;flex-wrap:wrap"><button class="smallbtn" onclick="finishSession('${s.id}')">${done?"↩ Vrátit":"✓ Dokončit"}</button><button class="secondary smallbtn" onclick="editSession('${s.id}')">Upravit</button><button class="secondary smallbtn" onclick="addReflection('${s.id}')">✎ Zpětná vazba</button><button class="danger smallbtn" onclick="deleteSession('${s.id}')">Smazat</button></div></div>`}
+function renderHome(){document.getElementById("todayLabel").textContent=new Date().toLocaleDateString("cs-CZ",{day:"numeric",month:"short"});const future=data.sessions.filter(s=>s.status!=="done"&&s.date>=dateToday()).sort((a,b)=>a.date.localeCompare(b.date));const n=future[0];document.getElementById("nextTitle").textContent=n?n.title:"Naplánuj svůj první trénink";document.getElementById("nextSub").textContent=n?`${fmtDate(n.date)} · ${n.duration} min · ${(n.blocks||[]).length} bloků`:"Sestav si trénink z jednotlivých bloků a ulož ho do kalendáře.";const done=data.sessions.filter(s=>s.status==="done");document.getElementById("statSessions").textContent=done.length;document.getElementById("statMinutes").textContent=done.reduce((sum,s)=>sum+(s.blocks||[]).reduce((a,b)=>a+(Number(b.minutes)||0),0),0);document.getElementById("statDrills").textContent=data.drills.length;const recent=[...data.sessions].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);document.getElementById("recentList").innerHTML=recent.length?recent.map(s=>`<div class="listitem"><div class="row between"><b>${esc(s.title)}</b><span class="small muted">${fmtDate(s.date)}</span></div><div class="small muted" style="margin-top:5px">${s.status==="done"?"✓ Dokončeno":"◷ Naplánováno"} · ${(s.blocks||[]).length} bloků</div></div>`).join(""):'<div class="empty"><b>Zatím žádné záznamy</b>Po uložení prvního tréninku ho najdeš tady.</div>'}
+function setHistoryFilter(f){histFilter=f;renderHistory()}
+function renderHistory(){let list=[...data.sessions].sort((a,b)=>b.date.localeCompare(a.date));if(histFilter!=="all")list=list.filter(s=>s.status===histFilter);["all","planned","done"].forEach(f=>{const el=document.getElementById("filter"+f[0].toUpperCase()+f.slice(1));if(el)el.style.background=histFilter===f?"#dff4e7":""});document.getElementById("historyList").innerHTML=list.length?list.map(sessionCard).join(""):'<div class="card empty"><b>Žádné tréninky v této kategorii</b>Vytvoř plán a po tréninku ho označ jako dokončený.</div>'}
+function openDrillForm(){document.getElementById("drillFormCard").style.display="block";document.getElementById("customDrillCategory").innerHTML=CATS.map(c=>`<option>${esc(c)}</option>`).join("");document.getElementById("drillFormCard").scrollIntoView({behavior:"smooth",block:"start"})}
+function closeDrillForm(){document.getElementById("drillFormCard").style.display="none"}
+function saveCustomDrill(){const title=document.getElementById("customDrillTitle").value.trim();if(!title){toast("Doplň název cvičení.");return}data.drills.push({id:"d"+Date.now(),title,category:document.getElementById("customDrillCategory").value,duration:Math.max(1,Number(document.getElementById("customDrillDuration").value)||10),players:document.getElementById("customDrillPlayers").value.trim()||"Neuvedeno",equipment:document.getElementById("customDrillEquipment").value.trim()||"Neuvedeno",description:document.getElementById("customDrillDescription").value.trim(),custom:true});save();["customDrillTitle","customDrillPlayers","customDrillEquipment","customDrillDescription"].forEach(id=>document.getElementById(id).value="");closeDrillForm();renderLibrary();fillDrillPicker();renderHome();toast("Cvičení přidáno do knihovny.")}
+function renderLibrary(){const q=(document.getElementById("drillSearch")?.value||"").toLowerCase();const cats=["Vše",...new Set(data.drills.map(d=>d.category))];document.getElementById("categoryFilters").innerHTML=cats.map(c=>`<button class="${activeCategory===c?'':'secondary'} smallbtn" onclick="activeCategory=${JSON.stringify(c)};renderLibrary()">${esc(c)}</button>`).join("");const drills=data.drills.filter(d=>(activeCategory==="Vše"||d.category===activeCategory)&&(`${d.title} ${d.category} ${d.description}`).toLowerCase().includes(q));document.getElementById("libraryList").innerHTML=drills.length?drills.map(d=>`<div class="card"><div class="row between"><span class="tag">${esc(d.category)}</span><span class="small muted">${d.duration} min</span></div><h3 style="margin:10px 0 5px">${esc(d.title)}</h3><p class="muted small">${esc(d.description||"Bez popisu.")}</p><div class="row muted small" style="flex-wrap:wrap;margin-top:8px"><span>👥 ${esc(d.players||"Neuvedeno")}</span><span>🎒 ${esc(d.equipment||"Neuvedeno")}</span></div><div class="row" style="margin-top:12px"><button class="smallbtn" onclick="quickAddDrill('${d.id}')">＋ Do plánu</button>${d.custom?`<button class="danger smallbtn" onclick="deleteDrill('${d.id}')">Smazat</button>`:""}</div></div>`).join(""):'<div class="card empty"><b>Nic jsme nenašli</b>Zkus jiný výraz nebo kategorii.</div>'}
+function quickAddDrill(id){const d=data.drills.find(x=>x.id===id);if(!d)return;draftBlocks.push({id:"b"+Date.now(),drillId:d.id,title:d.title,category:d.category,minutes:d.duration,note:"",done:false});fillDrillPicker();renderDraft();showTab("planner");toast("Cvičení přidáno do plánu.")}
+function deleteDrill(id){if(!confirm("Smazat vlastní cvičení z knihovny? Starší záznamy tréninků zůstanou zachované."))return;data.drills=data.drills.filter(d=>d.id!==id);save();renderLibrary();fillDrillPicker();toast("Cvičení smazáno.")}
+function renderStats(){const done=data.sessions.filter(s=>s.status==="done");const mins=done.reduce((n,s)=>n+(s.blocks||[]).reduce((a,b)=>a+(Number(b.minutes)||0),0),0);const bl=done.reduce((n,s)=>n+(s.blocks||[]).length,0);document.getElementById("doneCount").textContent=done.length;document.getElementById("doneHours").textContent=(mins/60).toLocaleString("cs-CZ",{maximumFractionDigits:1})+" h";document.getElementById("blockCount").textContent=bl;const sums={};const freq={};done.forEach(s=>(s.blocks||[]).forEach(b=>{sums[b.category]=(sums[b.category]||0)+(Number(b.minutes)||0);freq[b.title]=(freq[b.title]||0)+1}));const max=Math.max(1,...Object.values(sums));const entries=Object.entries(sums).sort((a,b)=>b[1]-a[1]);document.getElementById("categoryStats").innerHTML=entries.length?entries.map(([cat,n])=>`<div class="category-row"><div class="row between"><span class="small">${esc(cat)}</span><b class="small">${n} min</b></div><div class="progress"><span style="width:${n/max*100}%"></span></div></div>`).join(""):'<div class="empty">Statistiky se zobrazí po dokončení prvního tréninku.</div>';const pop=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5);document.getElementById("popularDrills").innerHTML=pop.length?pop.map(([name,n],i)=>`<div class="listitem row between"><span>${i+1}. ${esc(name)}</span><span class="tag">${n}×</span></div>`).join(""):'<div class="empty">Zatím žádná použitá cvičení.</div>'}
+// GitHub backup: token is intentionally never stored in localStorage or source code.
+function githubConfig(){return {owner:document.getElementById("ghOwner").value.trim(),repo:document.getElementById("ghRepo").value.trim(),branch:document.getElementById("ghBranch").value.trim()||"main",path:document.getElementById("ghPath").value.trim()||"zaloha/trenersky-denik-u8.json"}}
+function saveGitHubConfig(){const c=githubConfig();localStorage.setItem("trenerU8_github_backup_config",JSON.stringify(c))}
+function setGitHubBackupStatus(label,ok=false){const el=document.getElementById("githubBackupStatus");el.textContent=label;el.style.background=ok?"#dff4e7":"";el.style.color=ok?"#18794e":""}
+function githubInputs(){const c=githubConfig(),token=document.getElementById("ghToken").value.trim();if(!c.owner||!c.repo||!c.branch||!c.path||!token)throw new Error("Doplň vlastníka, repozitář, větev, cestu a token.");if(c.path.startsWith("/")||c.path.split("/").some(x=>x===".."||!x))throw new Error("Cesta k záloze není platná.");saveGitHubConfig();return {c,token}}
+function githubApiUrl(c){return `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split("/").map(encodeURIComponent).join("/")}`}
+async function githubRequest(url,token,options={}){const response=await fetch(url,{...options,headers:{Accept:"application/vnd.github+json",Authorization:`Bearer ${token}`,"X-GitHub-Api-Version":"2022-11-28",...(options.headers||{})}});if(!response.ok){let detail="";try{const body=await response.json();detail=body.message||""}catch{}if(response.status===404)return {notFound:true};throw new Error(`GitHub API (${response.status})${detail?": "+detail:""}`)}return response.json()}
+function toBase64Utf8(value){const bytes=new TextEncoder().encode(value);let binary="";for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary)}
+function fromBase64Utf8(value){const binary=atob(value.replace(/\s/g,""));const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+async function githubBackupNow(){let tokenField=document.getElementById("ghToken");try{const {c,token}=githubInputs();setGitHubBackupStatus("Zálohuji…");const url=githubApiUrl(c);let existing=await githubRequest(`${url}?ref=${encodeURIComponent(c.branch)}`,token);const payload=JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),drills:data.drills,sessions:data.sessions},null,2);const body={message:`Záloha trenérského deníku U8 ${new Date().toISOString()}`,content:toBase64Utf8(payload),branch:c.branch};if(!existing.notFound)body.sha=existing.sha;await githubRequest(url,token,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});setGitHubBackupStatus("Zálohováno",true);toast("Záloha byla uložena na GitHub.")}catch(e){setGitHubBackupStatus("Chyba");alert("Záloha na GitHub se nepodařila: "+e.message+"\nOvěř, že repozitář existuje, je soukromý a token má Contents: Read and write.")}finally{tokenField.value=""}}
+async function githubRestoreNow(){let tokenField=document.getElementById("ghToken");try{const {c,token}=githubInputs();if(!confirm("Obnovení nahradí všechna současná data v aplikaci daty ze zálohy GitHub. Nejdřív si případně stáhni místní JSON zálohu. Pokračovat?"))return;setGitHubBackupStatus("Načítám…");const result=await githubRequest(`${githubApiUrl(c)}?ref=${encodeURIComponent(c.branch)}`,token);if(result.notFound)throw new Error("Soubor zálohy nebyl nalezen. Nejdřív vytvoř zálohu.");const p=JSON.parse(fromBase64Utf8(result.content));if(!Array.isArray(p.drills)||!Array.isArray(p.sessions))throw new Error("Soubor neobsahuje platná data trenérského deníku.");data={drills:p.drills,sessions:p.sessions};save();fillDrillPicker();renderHome();renderLibrary();renderHistory();renderStats();renderCalendar();setGitHubBackupStatus("Obnoveno",true);toast("Data byla obnovena ze zálohy GitHub.")}catch(e){setGitHubBackupStatus("Chyba");alert("Obnovení z GitHubu se nepodařilo: "+e.message)}finally{tokenField.value=""}}
+function exportData(){const blob=new Blob([JSON.stringify({...data,exportedAt:new Date().toISOString()},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="trenersky-denik-u8-zaloha.json";a.click();URL.revokeObjectURL(a.href);toast("Záloha připravena.")}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result);if(!Array.isArray(p.drills)||!Array.isArray(p.sessions))throw new Error("format");if(!confirm("Import nahradí současná data. Pokračovat?"))return;data={drills:p.drills,sessions:p.sessions};save();fillDrillPicker();renderHome();renderLibrary();renderHistory();renderStats();toast("Data úspěšně importována.");}catch(err){alert("Soubor není platná záloha trenérského deníku.");}e.target.value=""};r.readAsText(f)}
+load();document.getElementById("sessionDate").value=dateToday();fillDrillPicker();renderDraft();renderHome();renderHistory();renderLibrary();renderStats();renderCalendar();
+const cc=getCloudConfig();if(cc.url)document.getElementById("supabaseUrl").value=cc.url;if(cc.key)document.getElementById("supabaseKey").value=cc.key;initCloud();
+try{const gc=JSON.parse(localStorage.getItem("trenerU8_github_backup_config")||"{}");document.getElementById("ghOwner").value=gc.owner||"";document.getElementById("ghRepo").value=gc.repo||"";document.getElementById("ghBranch").value=gc.branch||"main";document.getElementById("ghPath").value=gc.path||"zaloha/trenersky-denik-u8.json";if(gc.owner&&gc.repo)setGitHubBackupStatus("Nastaveno")}catch(e){}
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
+</body></html>

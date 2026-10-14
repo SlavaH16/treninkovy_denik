@@ -1,0 +1,22 @@
+{
+  "name": "Trenérský deník U8",
+  "short_name": "Trenér U8",
+  "description": "Plánování a evidence fotbalových tréninků pro U8",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f6f3",
+  "theme_color": "#102b24",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
