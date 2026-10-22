@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#102b24">
-<meta name="application-version" content="1.0.0">
+<meta name="app-test-version" content="19">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trenér U8">
@@ -399,7 +399,30 @@ function attendanceStatus(s,id){const attendance=normalizeAttendanceRecord(s&&s.
 function attendanceLabel(v){return v==="present"?"✓":v==="absent"?"×":v==="excused"?"O":"—"}
 const storeKey="trenerU8_v1";
 let data={drills:seedDrills,sessions:[]}, editId=null, editingCustomDrillId=null, draftBlocks=[], histFilter="all", activeCategory="Vše";
+function enrichCoerverLibrary(){
+ // Standardized first review draft for the Coerver category. Existing authored fields are preserved.
+ const all=[...seedDrills,...coerverDrills,...extendedDrills,...expertDrills];
+ const setMissing=(d,k,v)=>{if(d[k]===undefined||d[k]===null||d[k]===""||(Array.isArray(d[k])&&!d[k].length))d[k]=v};
+ all.filter(d=>d&&d.category==="Coerver Coaching").forEach(d=>{
+  const title=String(d.title||"");
+  const desc=String(d.description||"Procvičuj techniku s míčem.");
+  const oneBall=/Každý s míčem|Každý hráč|Jednotlivci|Všichni/i.test(String(d.players||""));
+  const duel=/1v1|soupeř|obránc|dvojic|stín/i.test(title+" "+desc);
+  const gate=/brank|gate/i.test(title+" "+desc);
+  const slalom=/slalom|kužel|koridor|mřížc|stanovišt/i.test(title+" "+desc);
+  setMissing(d,"age","U8/U9 (6–8 let; uprav podle zkušeností a schopností hráčů)");
+  setMissing(d,"setup",oneBall?"Každý hráč má vlastní míč. Vyznač bezpečný prostor přibližně 8 × 8 m; hráči mají mezi sebou dost místa a pracují bez křížení drah.":duel?"Vyznač koridor přibližně 8–12 × 5–8 m. Připrav míč a jasnou startovní čáru; další dvojice čeká mimo hrací prostor.":slalom?"Rozestav kužely do přehledné dráhy s rozestupy přibližně 2–3 m. Připrav dost míčů, aby hráči zbytečně nečekali.":"Vyznač malé přehledné hřiště a startovní místa. Rozlož pomůcky tak, aby se hráči při provádění úkolu nekřížili.");
+  setMissing(d,"steps",["Trenér krátce předvede pohyb pomalu a z obou stran.","Hráči zkouší techniku vlastním tempem; nejprve se soustředí na kontrolu míče.",desc,"Opakuj v krátkých intervalech, prostřídej pravou a levou nohu a dopřej krátkou pauzu.","Na závěr přidej jednoduchý herní podnět nebo krátkou soutěž, ale zachovej kvalitu provedení."]);
+  setMissing(d,"coachTips",["Nejdřív správná technika, teprve potom rychlost.","Sleduj obě nohy, měkký kontakt s míčem a rovnováhu těla.","Používej jeden krátký pokyn najednou a oceň odvahu zkoušet pohyb.","Hráči mají často zvedat hlavu a vnímat prostor, ne jen míč."]);
+  setMissing(d,"commonErrors",["Příliš dlouhé nebo tvrdé doteky a ztráta kontroly míče.","Provádění pouze silnější nohou.","Zrychlení dříve, než je pohyb zvládnutý.","Sledování míče bez kontroly prostoru a ostatních hráčů."]);
+  setMissing(d,"safety",["Zajisti rozestupy a odstraň překážky z prostoru.","Při únavě nebo ztrátě kontroly sniž rychlost a obnov rozestupy.",duel?"Souboj začíná pasivním tlakem; zakaž strkání, podražení a nebezpečné skluzování.":"Bez kontaktu mezi hráči; při střídání směru se hráči musí navzájem vyhnout.","Používej velikost prostoru a obtížnost přiměřenou věku a schopnostem skupiny."]);
+  setMissing(d,"gameTransfer",duel?"V malé hře 1v1 vybídni hráče, aby si všiml postavení obránce, zvolil vhodnou fintu a po překonání zrychlil do volného prostoru.":gate?"Přenesení do hry: po fintě se hráč musí rozhodnout, kterou brankou nebo směrem pokračovat.":"V malé hře oceň použití nacvičeného doteku či finty v pravý okamžik, změnu tempa a následné zvednutí hlavy.");
+  setMissing(d,"easier","Zpomal tempo, zvětši prostor a nejprve nacvič pohyb bez soupeře nebo bez časového tlaku.");
+  setMissing(d,"harder","Přidej změnu směru či barevný signál, střídání nohou nebo rozhodnutí podle pohybu spoluhráče; soupeř smí zvyšovat tlak postupně.");
+ });
+}
 function mergeBuiltInDrills(){
+ enrichCoerverLibrary();
  // Assign deterministic IDs to legacy built-ins that predate the ID field. Without this,
  // every missing ID becomes the same string "undefined" and all but one are discarded.
  const builtIns=[...seedDrills,...coerverDrills,...extendedDrills,...expertDrills];
@@ -556,6 +579,11 @@ function quickAddDrill(id){
 }
 function addCustomBlock(){const title=prompt("Název vlastního bloku:");if(!title||!title.trim())return;const cat=prompt("Kategorie (např. Práce s míčem, Situace 1v1):","Práce s míčem")||"Vlastní";const mins=Math.max(1,Math.min(90,Number(prompt("Délka v minutách:","10"))||10));draftBlocks.push({id:"b"+Date.now(),title:title.trim(),category:cat,minutes:mins,note:"",done:false});renderDraft()}
 function autoBuildTraining(){
+ // Do not silently discard blocks the coach has already added or edited.
+ if(Array.isArray(draftBlocks)&&draftBlocks.length>0){
+  const ok=confirm("Automatické sestavení nahradí aktuální rozpracovaný plán včetně ručně přidaných bloků a poznámek. Chceš pokračovat?");
+  if(!ok)return;
+ }
  const focus=document.getElementById("quickFocus").value;
  const duration=Math.max(15,Number(document.getElementById("quickDuration").value)||75);
  const mode=document.getElementById("quickMode").value;
@@ -709,17 +737,6 @@ function editCustomDrill(id){const d=data.drills.find(x=>String(x.id)===String(i
 function closeDrillForm(){document.getElementById("drillFormCard").style.display="none";resetCustomDrillForm()}
 function saveCustomDrill(){const wasEditing=editingCustomDrillId!==null;const title=document.getElementById("customDrillTitle").value.trim();if(!title){toast("Doplň název cvičení.");return}const item={title,category:document.getElementById("customDrillCategory").value,duration:Math.max(1,Math.min(60,Number(document.getElementById("customDrillDuration").value)||10)),players:document.getElementById("customDrillPlayers").value.trim()||"Neuvedeno",equipment:document.getElementById("customDrillEquipment").value.trim()||"Neuvedeno",description:document.getElementById("customDrillDescription").value.trim(),custom:true};const previousDrills=data.drills;
  if(editingCustomDrillId!==null){const index=data.drills.findIndex(d=>String(d.id)===String(editingCustomDrillId)&&d.custom);if(index<0){toast("Cvičení už v knihovně není. Obnov formulář a zkus to znovu.");return}data.drills=data.drills.map((d,i)=>i===index?{...d,...item}:d);}else{let id="d"+Date.now();while(data.drills.some(d=>String(d.id)===id))id+="x";data.drills=[...data.drills,{id,...item}];}if(!save()){data.drills=previousDrills;return;}closeDrillForm();renderLibrary();fillDrillPicker();renderHome();toast(wasEditing?"Vlastní cvičení upraveno.":"Cvičení přidáno do knihovny.")}
-function deleteDrill(id){
- const drill=data.drills.find(d=>String(d.id)===String(id)&&d.custom);
- if(!drill){toast("Vlastní cvičení už v knihovně není.");return false;}
- if(!confirm(`Opravdu smazat vlastní cvičení „${drill.title}“ z knihovny? Již uložené tréninky s tímto blokem zůstanou zachované.`))return false;
- const previousDrills=data.drills;
- data.drills=data.drills.filter(d=>!(String(d.id)===String(id)&&d.custom));
- if(!save()){data.drills=previousDrills;return false;}
- if(typeof editingCustomDrillId!=="undefined"&&String(editingCustomDrillId)===String(id))closeDrillForm();
- renderLibrary();fillDrillPicker();renderHome();
- toast("Vlastní cvičení bylo smazáno z knihovny.");return true;
-}
 function drillMatchesType(d,type){const cat=String(d.category||"");const hay=[cat,d.title,d.description,d.coachTips,d.setup,d.steps,d.equipment,d.commonErrors,d.gameTransfer].map(x=>String(x||"")).join(" ").toLocaleLowerCase("cs-CZ");if(!type||type==="all")return true;if(type==="Coerver Coaching")return cat.toLocaleLowerCase("cs-CZ")==="coerver coaching"||d.coerver===true||/^coerver:/i.test(String(d.title||""));if(type==="Vlastní")return !!d.custom;if(type==="Technika")return /míč|slalom|skills|coerver|klič|technika|přihráv|první dotek/i.test(hay);if(type==="Herní situace")return /1v1|2v2|3v|4v|hry|zakončení|obrana|souboj|zápas|hra|rondo/i.test(hay);if(type==="Atletika a koordinace")return /koordinace|atletika|běžecká|rovnováha|reakce|mřížka|zrcadlový|překážková|hon(ič|ička)/i.test(hay);if(type==="Síla a úpoly")return /síla|úpol|medvědí|krabí|dřep|mostík|souboj o prostor/i.test(hay);return true}
 function drillIllustration(d){
  const title=String(d.title||"").toLocaleLowerCase('cs-CZ'), desc=String(d.description||"").toLocaleLowerCase('cs-CZ'), cat=String(d.category||"").toLocaleLowerCase('cs-CZ'), key=title+' '+desc;
