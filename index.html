@@ -765,6 +765,58 @@ function drillIllustration(d){
  const cone=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-6 4 L0 -7 L6 4 Z" fill="#ff8b24" stroke="#fff0d7" stroke-width="1"/><ellipse cy="4" rx="6" ry="2" fill="#db6711"/></g>`;
  const player=(x,y,color='#1477d4',pose='stand')=>{if(pose==='bear')return `<g transform="translate(${x} ${y})"><circle cx="-12" cy="-5" r="4" fill="#f0bd8b" stroke="#17365b"/><path d="M-8 -5 Q0 -12 8 -5 L11 0 L-6 1 Z" fill="${color}" stroke="#17365b" stroke-width="1.4"/><path d="M-5 0 L-13 7 L-17 5 M5 0 L12 7 L16 5 M-4 -3 L-10 4 M7 -4 L13 2" fill="none" stroke="#17365b" stroke-width="2.6" stroke-linecap="round"/></g>`;if(pose==='crab')return `<g transform="translate(${x} ${y})"><circle cx="0" cy="-12" r="4" fill="#f0bd8b" stroke="#17365b"/><path d="M-6 -8 L-10 0 L9 0 L6 -8 Z" fill="${color}" stroke="#17365b"/><path d="M-8 -2 L-15 -8 L-18 -4 M8 -2 L15 -8 L18 -4 M-6 0 L-12 6 M6 0 L12 6" fill="none" stroke="#17365b" stroke-width="2.7" stroke-linecap="round"/></g>`;if(pose==='squat')return `<g transform="translate(${x} ${y})"><circle cy="-15" r="4" fill="#f0bd8b" stroke="#17365b"/><path d="M-4 -10 L-7 -2 L0 2 L7 -2 L4 -10 Z" fill="${color}" stroke="#17365b"/><path d="M-5 0 L-10 5 L-3 8 M5 0 L10 5 L3 8 M-4 -7 L-10 -2 M4 -7 L10 -2" fill="none" stroke="#17365b" stroke-width="2.7" stroke-linecap="round"/></g>`;return `<g transform="translate(${x} ${y})"><circle cy="-10" r="4.5" fill="#f0bd8b" stroke="#17365b" stroke-width="1"/><path d="M-5 -5 Q0 -8 5 -5 L7 4 L-7 4 Z" fill="${color}" stroke="#17365b" stroke-width="1.2"/><path d="M-3 4 L-6 12 M3 4 L6 12 M-4 -2 L-10 2 M4 -2 L10 2" stroke="#17365b" stroke-width="2.7" stroke-linecap="round" fill="none"/></g>`};
  const arrow=(x1,y1,x2,y2,color='#fff')=>`<path d="M${x1} ${y1} Q${(x1+x2)/2} ${Math.min(y1,y2)-5} ${x2} ${y2}" fill="none" stroke="${color}" stroke-width="2.4" stroke-dasharray="4 3" stroke-linecap="round"/><path d="M${x2-5} ${y2-3} L${x2} ${y2} L${x2-5} ${y2+3}" fill="none" stroke="${color}" stroke-width="2.2"/>`;
+
+ const isCoerver = cat==='coerver coaching' || /^coerver:/i.test(String(d.title||''));
+ if(isCoerver){
+   let kind='inside';
+   if(/toe taps|ťukání/.test(key))kind='toe';
+   else if(/v-pull|pull-push|drag-back/.test(key))kind='pull';
+   else if(/roll and cut|roll-and-cut|inside-outside|outside cut|inside cut/.test(key))kind='roll';
+   else if(/step-over|scissors|matthews|ronaldo chop|feint|finta/.test(key))kind='feint';
+   else if(/slalom|cone|kužel/.test(key))kind='slalom';
+   const label=kind==='toe'?'STŘÍDAVÉ DOTYKY PODRÁŽKOU':kind==='pull'?'PŘITÁHNI A VYTLAČ':kind==='roll'?'PŘEVAL A ZMĚŇ SMĚR':kind==='feint'?'FINTA A VÝPAD':kind==='slalom'?'VEDENÍ MEZI KUŽELY':'STŘÍDÁNÍ VNITŘNÍCH STRAN';
+   const shoe=(x,y,rot=0,sole=false)=>`<g transform="translate(${x} ${y}) rotate(${rot})">
+     <path d="M-42 -8 Q-30 -16 -18 -12 L-4 -5 Q8 -1 20 0 L36 5 Q44 9 39 17 Q35 22 21 20 L-20 16 Q-37 14 -44 7 Q-48 1 -42 -8Z" fill="${sole?'#26384a':'#1768ad'}" stroke="#142f4a" stroke-width="2.5"/>
+     <path d="M-17 -11 L-7 2 M-8 -8 L1 4 M1 -4 L9 6" stroke="${sole?'#e5edf2':'#d9efff'}" stroke-width="3" stroke-linecap="round"/>
+     <path d="M-34 13 Q-10 18 20 17" stroke="#f4f7f8" stroke-width="2" fill="none"/>
+     ${sole?'<g fill="#f8a51b" stroke="#ffe0a3" stroke-width="1"><circle cx="-30" cy="8" r="2.8"/><circle cx="-18" cy="10" r="2.8"/><circle cx="-5" cy="12" r="2.8"/><circle cx="8" cy="14" r="2.8"/><circle cx="22" cy="15" r="2.8"/></g>':''}
+   </g>`;
+   const ballLarge=(x,y)=>`<g transform="translate(${x} ${y})"><circle r="18" fill="#fff" stroke="#24384c" stroke-width="2.5"/><path d="M-6 -8 L5 -10 L12 -1 L6 8 L-6 6 L-11 -1Z" fill="#24384c"/><path d="M-6 -8 L-14 -13 M12 -1 L17 -5 M6 8 L9 16 M-6 6 L-14 12" stroke="#24384c" stroke-width="2"/></g>`;
+   const arrowBig=(x1,y1,x2,y2,c='#f5a623')=>`<path d="M${x1} ${y1} Q${(x1+x2)/2} ${Math.min(y1,y2)-12} ${x2} ${y2}" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round"/><path d="M${x2-10} ${y2-8} L${x2} ${y2} L${x2-11} ${y2+5}" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+   let panels=[];
+   if(kind==='toe') panels=[
+    {head:'1 · PŘIPRAV SE',sub:'Míč pod tělem',draw:shoe(80,73,-8,true)+ballLarge(147,68)},
+    {head:'2 · LEHKÝ DOTYK',sub:'Podrážka na míč',draw:shoe(111,61,-25,true)+ballLarge(147,76)+arrowBig(105,26,132,45)},
+    {head:'3 · STŘÍDEJ NOHY',sub:'Pravá – levá',draw:shoe(78,68,-8,true)+shoe(119,44,-23,true)+ballLarge(151,76)+arrowBig(88,24,110,35)}
+   ];
+   else if(kind==='pull') panels=[
+    {head:'1 · PŘITÁHNI',sub:'Podrážka táhne míč k sobě',draw:shoe(83,48,-18,true)+ballLarge(145,75)+arrowBig(139,38,113,58)},
+    {head:'2 · VYTLAČ ŠIKMO',sub:'Vnitřní stranou chodidla',draw:shoe(85,48,5,false)+ballLarge(130,70)+arrowBig(142,66,173,42)},
+    {head:'3 · TVAR V',sub:'Vrať se a opakuj',draw:shoe(82,48,-12,true)+ballLarge(112,70)+arrowBig(142,43,170,68)}
+   ];
+   else if(kind==='roll') panels=[
+    {head:'1 · PŘEVAL',sub:'Podrážka vede míč do strany',draw:shoe(80,52,-12,true)+ballLarge(133,72)+arrowBig(137,45,162,45)},
+    {head:'2 · ZMĚŇ SMĚR',sub:'Vnitřní / vnější strana',draw:shoe(80,52,10,false)+ballLarge(151,68)+arrowBig(160,88,126,88)},
+    {head:'3 · VYRAZ',sub:'První krok do prostoru',draw:shoe(74,52,-25,false)+ballLarge(127,70)+arrowBig(142,43,175,25)}
+   ];
+   else if(kind==='feint') panels=[
+    {head:'1 · NAZNAČ',sub:'Pohyb ramen a boků',draw:shoe(78,53,-12,false)+ballLarge(143,72)},
+    {head:'2 · OKLAM',sub:'Přešlápni kolem míče',draw:shoe(95,38,25,false)+ballLarge(143,72)+arrowBig(91,18,119,34)},
+    {head:'3 · ZRYCHLI',sub:'Odveď míč opačně',draw:shoe(75,50,-25,false)+ballLarge(125,72)+arrowBig(142,43,174,26)}
+   ];
+   else if(kind==='slalom') panels=[
+    {head:'1 · PŘIBLIŽ SE',sub:'Krátké doteky',draw:shoe(75,54,-10,false)+ballLarge(127,72)+`<path d="M160 38 L175 65 L160 92" fill="none" stroke="#e87922" stroke-width="5"/>`},
+    {head:'2 · OBJEĎ',sub:'Dotek vedle kuželu',draw:shoe(76,54,10,false)+ballLarge(145,70)+cone(169,47)+arrowBig(138,43,154,38)},
+    {head:'3 · VYRAZ',sub:'Zrychli po průjezdu',draw:shoe(72,54,-25,false)+ballLarge(121,70)+cone(158,54)+arrowBig(142,43,178,25)}
+   ];
+   else panels=[
+    {head:'1 · PRAVÁ NOHA',sub:'Vnitřní strana k míči',draw:shoe(75,55,-8,false)+ballLarge(142,72)+arrowBig(112,43,128,53)},
+    {head:'2 · LEVÁ NOHA',sub:'Střídej krátké doteky',draw:shoe(75,55,8,false)+ballLarge(142,72)+arrowBig(144,42,125,52)},
+    {head:'3 · DRŽ RYTMUS',sub:'Míč zůstává blízko',draw:shoe(73,55,-8,false)+ballLarge(122,72)+ballLarge(165,72)+arrowBig(138,42,153,42)}
+   ];
+   const panelSvg=panels.map((a,i)=>`<g transform="translate(${i*208} 0)"><rect x="4" y="4" width="198" height="145" rx="12" fill="#fff" stroke="#d6e5dc" stroke-width="2"/><circle cx="24" cy="24" r="14" fill="#075b43"/><text x="24" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">${i+1}</text><text x="103" y="27" text-anchor="middle" font-size="11" font-weight="800" fill="#205c46">${a.head}</text><path d="M14 113 H192" stroke="#e4ece7" stroke-width="2"/>${a.draw}<text x="103" y="132" text-anchor="middle" font-size="10.5" font-weight="700" fill="#253d32">${a.sub}</text></g>`).join('');
+   return `<div class="coerver-closeup" style="margin:10px 0;border-radius:14px;overflow:hidden;background:#eaf4ed;border:1px solid #d3e5d8"><svg viewBox="0 0 628 158" role="img" aria-label="${label}" style="display:block;width:100%;height:auto"><rect width="628" height="158" fill="#edf5ef"/>${panelSvg}</svg><div style="padding:7px 10px;font-size:12px;font-weight:800;letter-spacing:.2px;color:#235b46">${label} · názorné schéma doteku a směru míče</div></div>`;
+ }
  let bg='#287b45', field='<rect x="5" y="5" width="190" height="82" rx="7" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="1.3"/>', items='', label='';
  const add=(s)=>items+=s;
  // Explicit diagram keys take priority over title heuristics so the same title wording
